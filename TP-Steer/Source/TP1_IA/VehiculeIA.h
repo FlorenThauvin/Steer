@@ -6,12 +6,11 @@
 UENUM()
 enum AlgoUsing{
 	SEEK	  UMETA(DisplayName = "Seek Algo"),
+	EVADE	  UMETA(DisplayName = "Evade Algo"),
 	FLEE	  UMETA(DisplayName = "Flee Algo"),
 	ARRIVAL   UMETA(DisplayName = "Arrival Algo"),
 	PURSUIT	  UMETA(DisplayName = "Pursuit Algo"),
-	EVADE	  UMETA(DisplayName = "Evade Algo"),
 };
-
 
 UCLASS()
 class TP1_IA_API AVehiculeIA : public AVehicule{
@@ -20,16 +19,19 @@ class TP1_IA_API AVehiculeIA : public AVehicule{
 public:
 	AVehiculeIA();
 	virtual void Tick(float DeltaTime) override;
+	FVector ArrivalVelocity(FVector TargetLocation);
 	FVector SeekVelocity(FVector TargetLocation);
 	FVector FleeVelocity(FVector TargetLocation);
-	FVector ArrivalVelocity(FVector TargetLocation);
-	FVector PursuitVelocity();
 	FVector EvadeVelocity(float DeltaTime);
+	FVector PursuitVelocity();
 	void ChangeAlgo();
 	AlgoUsing IntToEnum();
 
 protected:
 	virtual void BeginPlay() override;
+	bool IsNew = false;
+	float Time = 0;
+	int Index = 0;
 	UPROPERTY(EditAnywhere, Category = "Algorithme")
 	TEnumAsByte<AlgoUsing> UsingAlgo;
 	UPROPERTY(EditAnywhere, Category = "Algorithme")
@@ -38,9 +40,5 @@ protected:
 	AVehicule* Target;
 	UPROPERTY(EditAnywhere, Category = "Algorithme")
 	float DistanceChange;
-	bool IsNew = false;
 	FVector NewTargetEvade;
-	float Time = 0;
-	int Index = 0;
-
 };

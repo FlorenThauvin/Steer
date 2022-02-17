@@ -9,10 +9,10 @@ void AVehiculeIA::Tick(float DeltaTime){
 	FVector TargetLocation = Target->GetActorLocation();
 	FVector SteeringDirection;
 	if (UsingAlgo == AlgoUsing::SEEK) SteeringDirection = SeekVelocity(TargetLocation);
-	else if (UsingAlgo == AlgoUsing::FLEE) SteeringDirection = FleeVelocity(TargetLocation);
-	else if(UsingAlgo == AlgoUsing::ARRIVAL) SteeringDirection = ArrivalVelocity(TargetLocation);
 	else if (UsingAlgo == AlgoUsing::PURSUIT) SteeringDirection = PursuitVelocity();
-	else SteeringDirection = EvadeVelocity(DeltaTime);
+	else if (UsingAlgo == AlgoUsing::ARRIVAL) SteeringDirection = ArrivalVelocity(TargetLocation);
+	else if (UsingAlgo == AlgoUsing::EVADE) SteeringDirection = EvadeVelocity(DeltaTime);
+	else SteeringDirection = FleeVelocity(TargetLocation);
 	FVector SteeringForce = Truncate(SteeringDirection, MaxForce);
 	FVector Acceleration = SteeringForce / Mass;
 	Velocity = Truncate(Velocity + Acceleration, MaxSpeed);
@@ -21,6 +21,9 @@ void AVehiculeIA::Tick(float DeltaTime){
 }
 
 FVector AVehiculeIA::SeekVelocity(FVector TargetLocation){
+	/*
+	The character moves in order to reach a fixed target.
+	*/
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("SEEK"));
 	FVector VectorDist = TargetLocation - GetActorLocation();
 	VectorDist.Normalize();
@@ -29,6 +32,9 @@ FVector AVehiculeIA::SeekVelocity(FVector TargetLocation){
 }
 
 FVector AVehiculeIA::ArrivalVelocity(FVector TargetLocation){
+	/*
+	The character moves in order to stop on a fixed target.
+	*/
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("ARRIVAL"));
 	FVector VectorDist = TargetLocation - GetActorLocation();
 	float Distance = VectorDist.Size();
@@ -39,6 +45,9 @@ FVector AVehiculeIA::ArrivalVelocity(FVector TargetLocation){
 }
 
 FVector AVehiculeIA::FleeVelocity(FVector TargetLocation){
+	/*
+	The character moves away from a fixed target.
+	*/
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("FLEE"));
 	FVector VectorDist = TargetLocation - GetActorLocation();
 	VectorDist = -VectorDist;
@@ -48,6 +57,9 @@ FVector AVehiculeIA::FleeVelocity(FVector TargetLocation){
 }
 
 FVector AVehiculeIA::PursuitVelocity(){
+	/*
+	The character moves in order to intercept a moving target
+	*/
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("PURSUIT"));
 	float Dot = FVector::DotProduct(Target->GetVelocity().GetSafeNormal(), (GetActorLocation() - Target->GetActorLocation()).GetSafeNormal());
 	float TurningParameter;
@@ -60,6 +72,8 @@ FVector AVehiculeIA::PursuitVelocity(){
 }
 
 FVector AVehiculeIA::EvadeVelocity(float DeltaTime){return -PursuitVelocity();}
+	/*The character moves in order to evade a pursuer.*/
+
 
 void AVehiculeIA::ChangeAlgo(){
 	Index = (Index + 1) % 5;
