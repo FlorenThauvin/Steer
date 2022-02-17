@@ -71,7 +71,10 @@ FVector AVehiculeIA::PursuitVelocity(){
 	return SeekVelocity(Target->GetActorLocation() + FuturTarget);
 }
 
-FVector AVehiculeIA::EvadeVelocity(float DeltaTime){return -PursuitVelocity();}
+FVector AVehiculeIA::EvadeVelocity(float DeltaTime){
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("EVADE")); 
+	return -PursuitVelocity();
+}
 	/*The character moves in order to evade a pursuer.*/
 
 
