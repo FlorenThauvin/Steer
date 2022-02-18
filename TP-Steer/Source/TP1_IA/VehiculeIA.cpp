@@ -62,20 +62,20 @@ FVector AVehiculeIA::PursuitVelocity(){
 	*/
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("PURSUIT"));
 	float Dot = FVector::DotProduct(Target->GetVelocity().GetSafeNormal(), (GetActorLocation() - Target->GetActorLocation()).GetSafeNormal());
-	float TurningParameter;
-	if (Dot >= 0) TurningParameter = 1 - Dot;
-	else TurningParameter = 1;
+	float Para;
 	float Distance = (Target->GetActorLocation() - GetActorLocation()).Size();
-	float T = Distance / Velocity.Size() * TurningParameter;
+	if (Dot >= 0) Para = 1 - Dot;
+	else Para = 1;
+	float T = Distance / Velocity.Size() * Para;
 	FVector FuturTarget = Target->GetVelocity() * T;
 	return SeekVelocity(Target->GetActorLocation() + FuturTarget);
 }
 
 FVector AVehiculeIA::EvadeVelocity(float DeltaTime){
+	/*The character moves in order to evade a pursuer.*/
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("EVADE")); 
 	return -PursuitVelocity();
 }
-	/*The character moves in order to evade a pursuer.*/
 
 
 void AVehiculeIA::ChangeAlgo(){

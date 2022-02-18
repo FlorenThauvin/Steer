@@ -32,13 +32,13 @@ protected:
 	bool IsNew = false;
 	float Time = 0;
 	int Index = 0;
-	UPROPERTY(EditAnywhere, Category = "Algorithme")
+	UPROPERTY(EditAnywhere, Category = "Algo")
 	TEnumAsByte<AlgoUsing> UsingAlgo;
-	UPROPERTY(EditAnywhere, Category = "Algorithme")
+	UPROPERTY(EditAnywhere, Category = "Algo")
 	float SlowingDistance;
 	UPROPERTY(EditAnywhere, Category = "Target")
 	AVehicule* Target;
-	UPROPERTY(EditAnywhere, Category = "Algorithme")
+	UPROPERTY(EditAnywhere, Category = "Algo")
 	float DistanceChange;
 	FVector NewTargetEvade;
 };
