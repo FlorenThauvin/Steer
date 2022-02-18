@@ -19,10 +19,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Physic")
 	FVector Velocity;
 	UPROPERTY(EditAnywhere, Category = "Physic")
+	float MaxForce = 1.0f;
+	UPROPERTY(EditAnywhere, Category = "Physic")
 	float Mass = 10.0f;
 	UPROPERTY(EditAnywhere, Category = "Physic")
 	float MaxSpeed = 15.0f;
-	UPROPERTY(EditAnywhere, Category = "Physic")
-	float MaxForce = 1.0f;
-
 };
