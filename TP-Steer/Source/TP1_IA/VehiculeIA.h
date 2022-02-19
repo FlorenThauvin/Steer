@@ -5,11 +5,11 @@
 
 UENUM()
 enum AlgoUsing{
-	SEEK	  UMETA(DisplayName = "Seek Algo"),
-	EVADE	  UMETA(DisplayName = "Evade Algo"),
-	FLEE	  UMETA(DisplayName = "Flee Algo"),
-	ARRIVAL   UMETA(DisplayName = "Arrival Algo"),
-	PURSUIT	  UMETA(DisplayName = "Pursuit Algo"),
+	SEEK	  UMETA(DisplayName = "Seek"),
+	EVADE	  UMETA(DisplayName = "Evade"),
+	FLEE	  UMETA(DisplayName = "Flee"),
+	ARRIVAL   UMETA(DisplayName = "Arrival"),
+	PURSUIT	  UMETA(DisplayName = "Pursuit"),
 };
 
 UCLASS()
@@ -18,12 +18,12 @@ class TP1_IA_API AVehiculeIA : public AVehicule{
 
 public:
 	AVehiculeIA();
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float Delta) override;
 	FVector ArrivalVelocity(FVector TargetLocation);
-	FVector SeekVelocity(FVector TargetLocation);
+	FVector SeekVelocity(FVector TargetLocation,bool IsShow);
 	FVector FleeVelocity(FVector TargetLocation);
-	FVector EvadeVelocity(float DeltaTime);
-	FVector PursuitVelocity();
+	FVector EvadeVelocity(float Delta);
+	FVector PursuitVelocity(bool IsShow);
 	void ChangeAlgo();
 	AlgoUsing IntToEnum();
 

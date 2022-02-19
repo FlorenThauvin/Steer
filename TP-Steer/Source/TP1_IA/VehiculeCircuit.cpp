@@ -5,9 +5,9 @@ AVehiculeCircuit::AVehiculeCircuit() { PrimaryActorTick.bCanEverTick = true; }
 void AVehiculeCircuit::BeginPlay() { Super::BeginPlay(); }
 
 void AVehiculeCircuit::Tick(float Delta) {
-	if (AlgoCircuit == AlgoCuircuit::CIRCUIT) TargCirc();
-	else if (AlgoCircuit == AlgoCuircuit::ONE_WAY) TargOne();
-	else TargTwo();
+	if (AlgoCircuit == AlgoCuircuit::CIRCUIT) TargCirc();				
+	else if (AlgoCircuit == AlgoCuircuit::ONE_WAY) TargOne();						
+	else TargTwo();														
 	FVector SteeringDirection = CalculDirection();
 	FVector SteeringForce = Truncate(SteeringDirection, MaxForce);
 	FVector Acceleration = SteeringForce / Mass;
@@ -19,10 +19,13 @@ void AVehiculeCircuit::Tick(float Delta) {
 FVector AVehiculeCircuit::CalculDirection() {
 	FVector Path = ListTargets[Index]->GetActorLocation();
 	if (IsArrived) return ArrivalVelocity(Path);
-	return SeekVelocity(Path);
+	return SeekVelocity(Path,false);
 }
 
 float AVehiculeCircuit::TargPath() {
+	/*
+	Vector qui récupère les coordonnées X,Y,Z du prochain point
+	*/
 	FVector Path = ListTargets[Index]->GetActorLocation();
 	return (Path - GetActorLocation()).Size();
 
@@ -35,8 +38,8 @@ void AVehiculeCircuit::TargCirc() {
 	beginning, so that the character keeps following the same path indefinitely.
 	*/
 	float Distance = TargPath();
-	if (Distance <= DistanceChangeTarget) Index += Direction;
-	if (Index >= ListTargets.Num()) Index = 0;
+	if (Distance <= DistanceChangeTarget) Index += Direction;			// quand le prochain Waypoint est proche on change de destination
+	if (Index >= ListTargets.Num()) Index = 0;							// on reprend la liste depuis le départ
 }
 
 void AVehiculeCircuit::TargOne() {
@@ -44,10 +47,10 @@ void AVehiculeCircuit::TargOne() {
 	the character follows a path that ends in a certain point. The character “arrives”
 	at that point and stops.
 	*/
-	if (IsArrived) return;
-	float Distance = TargPath();
-	if (Distance <= DistanceChangeTarget) Index += Direction;
-	if (Index >= ListTargets.Num()) {
+	if (IsArrived) return;				// si il est arrivé on stop
+	float Distance = TargPath();		
+	if (Distance <= DistanceChangeTarget) Index += Direction;   // quand le prochain Waypoint est proche on change de destination
+	if (Index >= ListTargets.Num()) {							// on vérifie qu'il est bien sur le dernier
 		IsArrived = true;
 		Index = ListTargets.Num() - 1;
 	}
@@ -62,13 +65,11 @@ void AVehiculeCircuit::TargTwo() {
 	direction again.
 	*/
 	float Distance = TargPath();
-	if (Distance <= DistanceChangeTarget){
+	if (Distance <= DistanceChangeTarget){		// quand le prochain Waypoint est proche on change de destination
 		Index += Direction;
 		if (Index >= ListTargets.Num() || Index == 0) {
-			if(Direction==1)Index = ListTargets.Num() - 1;
-			Direction = -Direction;
-			IsArrived = false;
-			IsOnTarget = false;
+			if(Direction==1)Index = ListTargets.Num() - 1;		// on décremente quand on est sur le dernier
+			Direction = -Direction;								// on change de direction								
 		}
 	}
 }

@@ -4,14 +4,14 @@ AVehiculeIA::AVehiculeIA(){PrimaryActorTick.bCanEverTick = true;}
 
 void AVehiculeIA::BeginPlay(){Super::BeginPlay();}
 
-void AVehiculeIA::Tick(float DeltaTime){
-	Super::Tick(DeltaTime);
+void AVehiculeIA::Tick(float Delta){
+	Super::Tick(Delta);
 	FVector TargetLocation = Target->GetActorLocation();
 	FVector SteeringDirection;
-	if (UsingAlgo == AlgoUsing::SEEK) SteeringDirection = SeekVelocity(TargetLocation);
-	else if (UsingAlgo == AlgoUsing::PURSUIT) SteeringDirection = PursuitVelocity();
+	if (UsingAlgo == AlgoUsing::SEEK) SteeringDirection = SeekVelocity(TargetLocation,true);
+	else if (UsingAlgo == AlgoUsing::PURSUIT) SteeringDirection = PursuitVelocity(true);
 	else if (UsingAlgo == AlgoUsing::ARRIVAL) SteeringDirection = ArrivalVelocity(TargetLocation);
-	else if (UsingAlgo == AlgoUsing::EVADE) SteeringDirection = EvadeVelocity(DeltaTime);
+	else if (UsingAlgo == AlgoUsing::EVADE) SteeringDirection = EvadeVelocity(Delta);
 	else SteeringDirection = FleeVelocity(TargetLocation);
 	FVector SteeringForce = Truncate(SteeringDirection, MaxForce);
 	FVector Acceleration = SteeringForce / Mass;
@@ -20,22 +20,23 @@ void AVehiculeIA::Tick(float DeltaTime){
 	SetActorRotation(FRotator(Velocity.Rotation()));
 }
 
-FVector AVehiculeIA::SeekVelocity(FVector TargetLocation){
+FVector AVehiculeIA::SeekVelocity(FVector TargetLocation,bool IsShow){
 	/*
 	The character moves in order to reach a fixed target.
 	*/
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("SEEK"));
+	if(IsShow)GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Blue, TEXT("SEEK"));
 	FVector VectorDist = TargetLocation - GetActorLocation();
 	VectorDist.Normalize();
 	FVector VelocityDesired = VectorDist * MaxSpeed;
 	return VelocityDesired - Velocity;
 }
 
+
 FVector AVehiculeIA::ArrivalVelocity(FVector TargetLocation){
 	/*
 	The character moves in order to stop on a fixed target.
 	*/
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("ARRIVAL"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Blue, TEXT("ARRIVAL"));
 	FVector VectorDist = TargetLocation - GetActorLocation();
 	float Distance = VectorDist.Size();
 	float RampedSpeed = MaxSpeed * (Distance / SlowingDistance);
@@ -48,7 +49,7 @@ FVector AVehiculeIA::FleeVelocity(FVector TargetLocation){
 	/*
 	The character moves away from a fixed target.
 	*/
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("FLEE"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Blue, TEXT("FLEE"));
 	FVector VectorDist = TargetLocation - GetActorLocation();
 	VectorDist = -VectorDist;
 	VectorDist.Normalize();
@@ -56,11 +57,11 @@ FVector AVehiculeIA::FleeVelocity(FVector TargetLocation){
 	return VelocityDesired - Velocity;
 }
 
-FVector AVehiculeIA::PursuitVelocity(){
+FVector AVehiculeIA::PursuitVelocity(bool IsShow){
 	/*
 	The character moves in order to intercept a moving target
 	*/
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("PURSUIT"));
+	if(IsShow)GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Blue, TEXT("PURSUIT"));
 	float Dot = FVector::DotProduct(Target->GetVelocity().GetSafeNormal(), (GetActorLocation() - Target->GetActorLocation()).GetSafeNormal());
 	float Para;
 	float Distance = (Target->GetActorLocation() - GetActorLocation()).Size();
@@ -68,13 +69,13 @@ FVector AVehiculeIA::PursuitVelocity(){
 	else Para = 1;
 	float T = Distance / Velocity.Size() * Para;
 	FVector FuturTarget = Target->GetVelocity() * T;
-	return SeekVelocity(Target->GetActorLocation() + FuturTarget);
+	return SeekVelocity(Target->GetActorLocation() + FuturTarget,false);
 }
 
 FVector AVehiculeIA::EvadeVelocity(float DeltaTime){
 	/*The character moves in order to evade a pursuer.*/
-	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, TEXT("EVADE")); 
-	return -PursuitVelocity();
+	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Blue, TEXT("EVADE")); 
+	return -PursuitVelocity(false);
 }
 
 
@@ -90,10 +91,10 @@ AlgoUsing AVehiculeIA::IntToEnum(){
 	case 1:
 		return AlgoUsing::FLEE;
 	case 2:
-		return AlgoUsing::ARRIVAL;
-	case 3:
 		return AlgoUsing::PURSUIT;
-	default:
+	case 3:
 		return AlgoUsing::EVADE;
+	default:
+		return AlgoUsing::ARRIVAL;
 	}
 }
