@@ -14,5 +14,5 @@ FVector AVehicule::Truncate(FVector v, float maxi){
 		v.Normalize();
 		return  v * maxi;
 	}
-	else return v;
+	return v;
 }

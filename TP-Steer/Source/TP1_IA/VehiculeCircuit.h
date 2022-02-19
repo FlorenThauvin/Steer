@@ -16,9 +16,6 @@ class TP1_IA_API AVehiculeCircuit : public AVehiculeIA
 {
 	GENERATED_BODY()
 
-public:
-	AVehiculeCircuit();
-
 protected:
 	virtual void BeginPlay() override;
 	bool IsArrived = false;
@@ -36,8 +33,10 @@ protected:
 	float Time;
 
 public:
+	AVehiculeCircuit();
 	virtual void Tick(float DeltaTime) override;
 	FVector CalculDirection();
+	float TargPath();
 	void TargCirc();
 	void TargOne();
 	void TargTwo(float DeltaTime);
