@@ -34,3 +34,25 @@ Sur l'écran il y a :
 	- la plus grande va suivre l'algo One Path
 
 	Pour le lancer il suffit de cliquer sur l'icone Play en haut à droite et pour pouvoir déplacer le joueur il faut clique gauche.
+
+
+
+
+Pour ce qui est de l'organisation :
+
+Le dossier "Content" contient 4 dossiers :
+
+	- "Blueprint" qui contient les 4 BP dont j'ai eu besoin
+	- "Maps" qui contient la MainMap
+	- "Mats" qui contient les matériaux que j'ai créé pour différencier les objets
+	- "StarterContent" qui contient du contenu de base
+
+Dans C++ Classes se situe simplement mes 4 class C++
+
+Et pour finir dans le "World Outliner" en haut à droite on peut trouver :
+	- 1 dossier Véhicules qui contient les 5 véhicules
+	- 1 dossier Waypoints contenant tous mes waypoint
+	- la caméra
+	- la lumière
+	- le sol
+  
