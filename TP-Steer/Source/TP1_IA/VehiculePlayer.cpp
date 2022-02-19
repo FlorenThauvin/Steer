@@ -34,5 +34,5 @@ void AVehiculePlayer::Change(){
 	if (IA) IA->ChangeAlgo();
 }
 
-void AVehiculePlayer::MoveForward(float f){Direction = FVector(Direction.X + f, Direction.Y, Direction.Z);}
-void AVehiculePlayer::MoveRight(float f){Direction = FVector(Direction.X, Direction.Y + f, Direction.Z);}
+void AVehiculePlayer::MoveForward(float f){Direction = FVector(Direction.X + f * 10, Direction.Y, Direction.Z);}
+void AVehiculePlayer::MoveRight(float f){Direction = FVector(Direction.X, Direction.Y + f *10 , Direction.Z);}

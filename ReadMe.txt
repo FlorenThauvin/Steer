@@ -19,12 +19,13 @@ Sur l'écran il y a :
 
 - Une capsule rouge qui représente le joueur.
 	Z pour avancer
-	S pour reculer			( le personnage tourne difficilement , il ne faut pas hésiter à appuyer plusieurs 
-	D pour tourner à droite			 fois et laisser enfoncer pour mieux se déplacer)
+	S pour reculer			( le personnage tourne difficilement , il faut laisser enfoncer pour tourner )
+	D pour tourner à droite			
 	Q pour tourner à gauche	
 
-- Une flèche bleu qui représente l'IA qui contient les algos de Seek, Flee , Arrival , Pursuit et Evade.
-	Space pour changer d'algo ( Seek inialement )
+- Une flèche bleu qui représente l'IA qui contient les algos de Seek, Flee , Arrival , Pursuit et Evade , l'algo actuel est affiché en haut à gauche en bleu.
+	"A" pour changer d'algo ( Seek initialement )
+
 
 - Trois flèches vertes 
 	- la plus petite va suivre un Circuit
@@ -33,8 +34,9 @@ Sur l'écran il y a :
 
 	- la plus grande va suivre l'algo One Path
 
-	Pour le lancer il suffit de cliquer sur l'icone Play en haut à droite et pour pouvoir déplacer le joueur il faut clique gauche.
 
+
+	Pour le lancer il suffit de cliquer sur l'icone Play en haut à droite et pour pouvoir déplacer le joueur il faut clique gauche sur l'écran.
 
 
 
