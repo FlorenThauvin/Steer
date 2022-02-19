@@ -13,8 +13,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	AVehiculePlayer();
 	void Change();
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	void MoveForward(float f);
+	void MoveRight(float f);
 
 protected:
 	virtual void BeginPlay() override;

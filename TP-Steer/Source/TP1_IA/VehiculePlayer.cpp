@@ -12,15 +12,14 @@ void AVehiculePlayer::BeginPlay(){
 void AVehiculePlayer::BindInput(){
 	InputComponent = NewObject<UInputComponent>(this);
 	InputComponent->RegisterComponent();
-	if (InputComponent)
-	{
-		InputComponent->BindAction("ChangeAlgo", IE_Pressed, this, &AVehiculePlayer::Change);
+	if (InputComponent){
 		InputComponent->BindAxis("MoveForward", this, &AVehiculePlayer::MoveForward);
 		InputComponent->BindAxis("MoveRight", this, &AVehiculePlayer::MoveRight);
-
+		InputComponent->BindAction("ChangeAlgo", IE_Pressed, this, &AVehiculePlayer::Change);
 		EnableInput(GetWorld()->GetFirstPlayerController());
 	}
 }
+
 
 void AVehiculePlayer::Tick(float DeltaTime){
 	FVector SteeringForce = Truncate(Direction, MaxForce);
@@ -35,11 +34,5 @@ void AVehiculePlayer::Change(){
 	if (IA) IA->ChangeAlgo();
 }
 
-void AVehiculePlayer::MoveForward(float Value){
-	Direction = FVector(Direction.X + Value, Direction.Y, Direction.Z);
-}
-
-void AVehiculePlayer::MoveRight(float Value){
-	Direction = FVector(Direction.X, Direction.Y + Value, Direction.Z);
-
-}
+void AVehiculePlayer::MoveForward(float f){Direction = FVector(Direction.X + f, Direction.Y, Direction.Z);}
+void AVehiculePlayer::MoveRight(float f){Direction = FVector(Direction.X, Direction.Y + f, Direction.Z);}
