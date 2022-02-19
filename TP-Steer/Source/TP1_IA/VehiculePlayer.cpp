@@ -25,8 +25,8 @@ void AVehiculePlayer::Tick(float DeltaTime){
 	FVector SteeringForce = Truncate(Direction, MaxForce);
 	FVector Acceleration = SteeringForce / Mass;
 	Velocity = Truncate(Velocity + Acceleration, MaxSpeed);
-	SetActorLocation(GetActorLocation() + Velocity);
 	SetActorRotation(FRotator(Velocity.Rotation()));
+	SetActorLocation(GetActorLocation() + Velocity);
 }
 
 void AVehiculePlayer::Change(){
