@@ -7,7 +7,7 @@ void AVehiculeCircuit::BeginPlay() { Super::BeginPlay(); }
 void AVehiculeCircuit::Tick(float Delta) {
 	if (AlgoCircuit == AlgoCuircuit::CIRCUIT) TargCirc();
 	else if (AlgoCircuit == AlgoCuircuit::ONE_WAY) TargOne();
-	else TargTwo(Delta);
+	else TargTwo();
 	FVector SteeringDirection = CalculDirection();
 	FVector SteeringForce = Truncate(SteeringDirection, MaxForce);
 	FVector Acceleration = SteeringForce / Mass;
@@ -54,7 +54,7 @@ void AVehiculeCircuit::TargOne() {
 }
 
 
-void AVehiculeCircuit::TargTwo(float Delta) {
+void AVehiculeCircuit::TargTwo() {
 	/*
 	the character follows a path that ends in a certain point. The character
 	“arrives” at that point and then starts to follow the path on the opposite direction. When
@@ -62,28 +62,14 @@ void AVehiculeCircuit::TargTwo(float Delta) {
 	direction again.
 	*/
 	float Distance = TargPath();
-	if (IsArrived) {
-		if (Distance <= 1.f) IsOnTarget = true;
-		if (IsOnTarget) {
-			CurrentTime -= Delta;
-			if (CurrentTime <= 0) {
-				Direction = -Direction;
-				IsArrived = false;
-				IsOnTarget = false;
-			}
+	if (Distance <= DistanceChangeTarget){
+		Index += Direction;
+		if (Index >= ListTargets.Num() || Index == 0) {
+			if(Direction==1)Index = ListTargets.Num() - 1;
+			Direction = -Direction;
+			IsArrived = false;
+			IsOnTarget = false;
 		}
-		return;
-	}
-	if (Distance <= DistanceChangeTarget) Index += Direction;
-	if (Index >= ListTargets.Num()) {
-		IsArrived = true;
-		Index = ListTargets.Num() - 1;
-		CurrentTime = Time;
-	}
-	else if (Index <= 0 && Direction == -1) {
-		IsArrived = true;
-		Index = 0;
-		CurrentTime = Time;
 	}
 }
 

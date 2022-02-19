@@ -34,10 +34,10 @@ protected:
 
 public:
 	AVehiculeCircuit();
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float Delta) override;
 	FVector CalculDirection();
 	float TargPath();
 	void TargCirc();
 	void TargOne();
-	void TargTwo(float DeltaTime);
+	void TargTwo();
 };
